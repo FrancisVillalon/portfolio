@@ -1,0 +1,11 @@
+<div class="writeup-grid" markdown="0">
+  {% assign children = site.pages | where: "parent", page.title | sort: "nav_order" %}
+  {% for child in children %}
+  <a href="{{ child.url | relative_url }}" class="writeup-card">
+    <span class="writeup-card-title">{{ child.title }}</span>
+    {% if child.difficulty %}
+    <span class="difficulty-pill difficulty-{{ child.difficulty | downcase }}">{{ child.difficulty }}</span>
+    {% endif %}
+  </a>
+  {% endfor %}
+</div>

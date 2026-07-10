@@ -1,0 +1,41 @@
+title: Francis Villalon - Portfolio
+description: CTF writeups, self-study labs, and home lab documentation covering digital forensics, incident response, malware analysis, and memory forensics.
+url: "https://francisvillalon.github.io"
+baseurl: "/portfolio"
+
+remote_theme: just-the-docs/just-the-docs
+
+plugins:
+  - jekyll-remote-theme
+
+color_scheme: dark
+search_enabled: true
+heading_anchors: true
+nav_sort: case_insensitive
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Jekyll excludes any folder starting with "_" by default (reserved for
+# _layouts, _includes, etc.). cybersecurity-home-lab/ ships its images in an
+# Obsidian-style shared _attachments/ folder, so it must be included explicitly
+# or every image in that section 404s. Jekyll's `include` matches by basename,
+# not full path, so a bare "_attachments" is required here (a full relative
+# path like "cybersecurity-home-lab/_attachments" does not match).
+include:
+  - "_attachments"
+
+exclude:
+  - "cyberdefender-writeups/under review/"
+  - ".claude/"
+  - "cyberdefender-writeups/README.md"
+  - "memlabs-writeups/README.md"
+  - "cybersecurity-home-lab/README.md"
+  - "README.md"
+  - "Gemfile"
+  - "Gemfile.lock"
+  - "docker-compose.yml"
+  - "vendor/"

@@ -1,0 +1,10 @@
+services:
+  jekyll:
+    image: jekyll/jekyll:latest
+    user: "${UID:-1000}:${GID:-1000}"
+    command: bash -c "bundle install && bundle exec jekyll serve --watch --force_polling -H 0.0.0.0"
+    ports:
+      - "${JEKYLL_PORT:-4000}:4000"
+    volumes:
+      - .:/srv/jekyll
+      - ./.bundle-cache:/usr/local/bundle

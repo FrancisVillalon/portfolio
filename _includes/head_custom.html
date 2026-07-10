@@ -1,0 +1,908 @@
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%F0%9F%9B%A1%EF%B8%8F</text></svg>">
+
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+
+<style>
+  .site-header {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+    padding: 40px 16px 28px 16px !important;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.25) !important;
+    text-align: center;
+  }
+
+  .site-title {
+    font-size: 17px !important;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    padding: 0 !important;
+    line-height: 1.3 !important;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .site-title::before {
+    content: "🛡";
+    font-size: 18px;
+  }
+
+  .site-title.profile-title {
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .site-title.profile-title::before {
+    content: none;
+  }
+
+  .profile-avatar {
+    width: 104px;
+    height: 104px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 14px;
+  }
+
+  .profile-name {
+    font-size: 19px;
+    font-weight: 700;
+  }
+
+  .profile-brand {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.55;
+    margin-top: 2px;
+  }
+
+  .profile-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-size: 13px;
+  }
+
+  .profile-links a {
+    color: #a996f5;
+    text-decoration: none;
+  }
+
+  .profile-links a:hover {
+    text-decoration: underline;
+  }
+
+  .profile-links-sep {
+    opacity: 0.4;
+  }
+
+  .aux-nav {
+    font-size: 14px !important;
+  }
+
+  /* The theme caps the search box (and its results dropdown, separately) at
+     33.5rem regardless of how much header space is actually free - stretch
+     both to fill the row instead. */
+  .search-input-wrap {
+    max-width: none !important;
+  }
+
+  @media (min-width: 50rem) {
+    .search-active .search-input-wrap {
+      width: 100% !important;
+    }
+
+    .search-results {
+      width: 100% !important;
+    }
+  }
+
+  .aux-nav-list-item .site-button,
+  .aux-nav-list-item a {
+    font-weight: 500;
+  }
+
+  .breadcrumb-nav-list-item {
+    font-size: 15px !important;
+  }
+
+  .breadcrumb-nav-list-item::after {
+    font-size: 15px;
+  }
+
+  .nav-list .nav-list-item > .nav-list {
+    display: block !important;
+    max-height: 0;
+    overflow: hidden;
+  }
+
+  /* Guide line: drawn per-item (not as a border on the parent <ul>) so it
+     doesn't depend on how that box's border behaves through the
+     max-height/overflow expand animation. Each item nested two or more
+     levels deep (i.e. inside another item's own children) draws the line
+     flush with its own left edge - since deeper items are already pushed
+     further right by the theme's own per-level padding, this naturally
+     staircases outward with depth instead of needing a offset per level. */
+  .nav-list .nav-list-item {
+    position: relative;
+  }
+
+  .nav-list .nav-list .nav-list-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+    background: rgba(128, 128, 128, 0.28);
+  }
+
+  .nav-list .nav-list-item.active > .nav-list {
+    max-height: 1200px;
+  }
+
+  /* Transitions are opt-in via .nav-animate, added by JS only on an actual
+     click of the expander arrow - not when JS auto-opens the current page's
+     section on load, which would otherwise replay the expand animation on
+     every navigation. */
+  .nav-list .nav-list-item.nav-animate > .nav-list {
+    transition: max-height 0.28s ease;
+  }
+
+  .nav-list .nav-list-item.active.nav-animate > .nav-list {
+    transition: max-height 0.4s ease;
+  }
+
+  .nav-list-item.nav-animate > .nav-list-expander svg {
+    transition: transform 0.25s ease;
+  }
+
+  .nav-list-item > .nav-list-link {
+    cursor: pointer;
+  }
+
+  .gh-alert {
+    border-left-width: 4px !important;
+    border-radius: 0 6px 6px 0;
+    padding: 12px 16px !important;
+  }
+
+  .gh-alert-title {
+    margin: 0 0 6px 0 !important;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .gh-alert-note { border-left-color: #4493f8 !important; background: rgba(68, 147, 248, 0.1) !important; }
+  .gh-alert-tip { border-left-color: #3fb950 !important; background: rgba(63, 185, 80, 0.1) !important; }
+  .gh-alert-important { border-left-color: #ab7df8 !important; background: rgba(171, 125, 248, 0.1) !important; }
+  .gh-alert-warning { border-left-color: #d29922 !important; background: rgba(210, 153, 34, 0.1) !important; }
+  .gh-alert-caution { border-left-color: #f85149 !important; background: rgba(248, 81, 73, 0.1) !important; }
+
+  .gh-alert-note .gh-alert-title { color: #4493f8; }
+  .gh-alert-tip .gh-alert-title { color: #3fb950; }
+  .gh-alert-important .gh-alert-title { color: #ab7df8; }
+  .gh-alert-warning .gh-alert-title { color: #d29922; }
+  .gh-alert-caution .gh-alert-title { color: #f85149; }
+
+  .whoami {
+    margin: 32px 0;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 8px;
+    overflow: hidden;
+    background: rgba(128, 128, 128, 0.05);
+    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+  }
+
+  .whoami-titlebar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 14px;
+    background: rgba(128, 128, 128, 0.12);
+    border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+  }
+
+  .whoami-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .whoami-dot-red { background: #ff5f56; }
+  .whoami-dot-yellow { background: #ffbd2e; }
+  .whoami-dot-green { background: #27c93f; }
+
+  .whoami-titletext {
+    margin-left: 8px;
+    font-size: 12px;
+    opacity: 0.6;
+  }
+
+  .whoami-body {
+    padding: 18px 20px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .whoami-body p {
+    margin: 0 0 6px 0;
+  }
+
+  .whoami-prompt {
+    color: #27c93f;
+  }
+
+  .whoami-name {
+    font-size: 17px;
+    font-weight: 600;
+    margin-top: 10px !important;
+  }
+
+  .whoami-focus {
+    opacity: 0.6;
+    margin-bottom: 14px !important;
+  }
+
+  .whoami-bio {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    opacity: 0.85;
+    margin-bottom: 14px !important;
+  }
+
+  .whoami-links a {
+    margin-right: 16px;
+    color: #7253ed;
+  }
+
+  .side-bar .nav-list-link,
+  .site-nav .nav-list-link {
+    font-size: 15px !important;
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+  }
+
+  .side-bar .nav-list-link:hover,
+  .site-nav .nav-list-link:hover {
+    color: rgba(255, 255, 255, 0.95) !important;
+  }
+
+  .side-bar .nav-list-link.active {
+    color: #ffffff !important;
+    font-weight: 600;
+  }
+
+  .writeup-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .writeup-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 76px;
+    padding: 14px 16px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .writeup-card:hover {
+    border-color: #7253ed;
+    transform: translateY(-2px);
+  }
+
+  .writeup-card-title {
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .difficulty-pill {
+    align-self: flex-start;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+
+  .difficulty-easy {
+    color: #27c93f;
+    background: rgba(39, 201, 63, 0.15);
+  }
+
+  .difficulty-medium {
+    color: #ffbd2e;
+    background: rgba(255, 189, 46, 0.15);
+  }
+
+  .difficulty-hard {
+    color: #ff5f56;
+    background: rgba(255, 95, 86, 0.15);
+  }
+
+  .category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 32px 0;
+  }
+
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .category-card:hover {
+    border-color: #7253ed;
+    transform: translateY(-2px);
+  }
+
+  .category-card .category-card-title {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .category-card p {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    opacity: 0.75;
+    line-height: 1.5;
+  }
+
+  .category-card .category-count {
+    margin-top: auto;
+    padding-top: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.55;
+  }
+
+  #page-toc {
+    position: fixed;
+    top: 100px;
+    right: 24px;
+    width: 220px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    font-size: 14.5px;
+    line-height: 1.5;
+    z-index: 5;
+  }
+
+  #page-toc .page-toc-title {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    opacity: 0.6;
+    margin-bottom: 8px;
+  }
+
+  #page-toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Every nested level (not the outermost list) gets its own guide line and
+     indent step, so depth reads as a staircase of lines like a file tree. */
+  #page-toc li > ul {
+    margin-left: 0.7rem;
+    padding-left: 0.65rem;
+    border-left: 1px solid rgba(128, 128, 128, 0.3);
+  }
+
+  #page-toc li {
+    margin: 0;
+  }
+
+  #page-toc a {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 0 3px 4px;
+    color: inherit;
+    opacity: 0.65;
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    margin-left: -1px;
+  }
+
+  #page-toc a:hover {
+    opacity: 1;
+  }
+
+  #page-toc a.toc-h1 {
+    font-weight: 600;
+    opacity: 0.85;
+  }
+
+  #page-toc a.active {
+    opacity: 1;
+    border-left: 2px solid #7253ed;
+  }
+
+  /* Clickable caret next to any heading that has nested sub-headings under
+     it - toggles that section collapsed without following the link (the
+     link itself still navigates to the heading as normal). */
+  #page-toc .toc-caret {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    margin-left: -3px;
+    cursor: pointer;
+  }
+
+  #page-toc .toc-caret::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 4px solid currentColor;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    opacity: 0.55;
+    transform: rotate(90deg);
+    transition: transform 0.15s ease;
+  }
+
+  #page-toc .toc-collapsed > a > .toc-caret::before {
+    transform: rotate(0deg);
+  }
+
+  #page-toc .toc-collapsed > ul {
+    display: none;
+  }
+
+  @media (max-width: 1400px) {
+    #page-toc {
+      display: none;
+    }
+  }
+
+  .tag-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 4px 0 32px 0 !important;
+  }
+
+  .tag-pill {
+    font-family: SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: rgba(114, 83, 237, 0.14);
+    color: #a996f5;
+    white-space: nowrap;
+  }
+
+  .main-content h1 {
+    margin-top: 52px !important;
+    padding-top: 24px !important;
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+  }
+
+  .main-content h1:first-of-type {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    border-top: none;
+  }
+
+  .main-content h2 {
+    margin-top: 36px !important;
+    padding-left: 12px;
+    border-left: 3px solid rgba(114, 83, 237, 0.45);
+  }
+
+  .main-content h3 {
+    margin-top: 28px !important;
+  }
+
+  .main-content p {
+    line-height: 1.7;
+  }
+
+  /* Inline code (e.g. `192.168.20.100`) defaults to 0.75em in the theme,
+     which reads noticeably smaller than surrounding text. Bump it up,
+     scoped the same way the theme scopes its own background/border style
+     for inline code, so fenced code blocks are unaffected. */
+  .main-content :not(pre, figure) > code {
+    font-size: 0.95em;
+  }
+
+  .main-content blockquote {
+    border-left: 3px solid #7253ed;
+    background: rgba(114, 83, 237, 0.08);
+    padding: 10px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 16px 0 !important;
+  }
+
+  .main-content blockquote p {
+    margin: 0 !important;
+    opacity: 0.85;
+  }
+
+  .main-content p:has(> em:only-child) {
+    font-size: 12px;
+    opacity: 0.6;
+    text-align: center;
+    margin-top: 4px !important;
+    margin-bottom: 28px !important;
+  }
+
+  .main-content p:has(> img:only-child) {
+    text-align: center;
+    margin-bottom: 4px !important;
+  }
+
+  /* Image lightbox - click any content image to zoom without zooming the page */
+  .main-content img {
+    cursor: zoom-in;
+    transition: opacity 0.15s ease;
+  }
+
+  .main-content img:hover {
+    opacity: 0.92;
+  }
+
+  .lightbox-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5vh 5vw;
+    background: rgba(0, 0, 0, 0.75);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease;
+  }
+
+  .lightbox-overlay.lightbox-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .lightbox-overlay img {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 6px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    cursor: zoom-out;
+    transform: scale(0.96);
+    transition: transform 0.2s ease;
+  }
+
+  .lightbox-overlay.lightbox-open img {
+    transform: scale(1);
+  }
+
+  .lightbox-close {
+    position: fixed;
+    top: 20px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s ease;
+  }
+
+  .lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Hide the theme's default "This site uses Just the Docs..." credit line.
+     MIT license only requires the notice travel with the source, not a
+     visible on-page badge - this div has no other content in it. */
+  .site-footer {
+    display: none !important;
+  }
+</style>
+
+<script>
+  // Mark a nav-list-item as animatable the moment its expander arrow is
+  // actually clicked (capture phase runs before just-the-docs.js's own
+  // bubble-phase handler toggles .active). This keeps the expand/collapse
+  // transition for manual clicks while skipping it when the theme's JS
+  // auto-opens the current page's section on every page load.
+  document.addEventListener(
+    "click",
+    function (e) {
+      var btn = e.target.closest && e.target.closest(".nav-list-expander");
+      if (btn && btn.parentNode) {
+        btn.parentNode.classList.add("nav-animate");
+      }
+    },
+    true
+  );
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var siteTitle = document.querySelector(".site-title");
+    if (!siteTitle) return;
+
+    siteTitle.innerHTML = "";
+    siteTitle.classList.add("profile-title");
+
+    var avatar = document.createElement("img");
+    avatar.className = "profile-avatar";
+    avatar.src = "https://github.com/FrancisVillalon.png";
+    avatar.alt = "";
+    siteTitle.appendChild(avatar);
+
+    var name = document.createElement("span");
+    name.className = "profile-name";
+    name.textContent = "Francis Villalon";
+    siteTitle.appendChild(name);
+
+    var brand = document.createElement("span");
+    brand.className = "profile-brand";
+    brand.textContent = "Cybersecurity";
+    siteTitle.appendChild(brand);
+
+    var links = document.createElement("div");
+    links.className = "profile-links";
+    links.innerHTML =
+      '<a href="https://github.com/FrancisVillalon" target="_blank" rel="noopener">GitHub</a>' +
+      '<span class="profile-links-sep">&middot;</span>' +
+      '<a href="https://linkedin.com/in/francisvillalon" target="_blank" rel="noopener">LinkedIn</a>';
+    siteTitle.insertAdjacentElement("afterend", links);
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var content = document.querySelector(".main-content");
+    if (!content) return;
+
+    var firstP = content.querySelector("p");
+    if (firstP) {
+      var tagText = firstP.textContent.trim();
+      if (/^(#\S+\s*)+$/.test(tagText)) {
+        var tags = tagText.split(/\s+/).filter(Boolean);
+        firstP.textContent = "";
+        firstP.className = "tag-pills";
+        tags.forEach(function (tag) {
+          var span = document.createElement("span");
+          span.className = "tag-pill";
+          span.textContent = tag;
+          firstP.appendChild(span);
+        });
+      }
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var content = document.querySelector(".main-content");
+    if (!content) return;
+
+    var headings = content.querySelectorAll("h1, h2, h3");
+    if (headings.length < 2) return;
+
+    var toc = document.createElement("nav");
+    toc.id = "page-toc";
+
+    var title = document.createElement("div");
+    title.className = "page-toc-title";
+    title.textContent = "On this page";
+    toc.appendChild(title);
+
+    // Build an actual nested <ul> tree (h1 > h2 > h3) rather than one flat
+    // list, so each depth gets its own guide line/indent step in CSS and
+    // parents can show a "this branches" caret via .toc-has-children.
+    var rootList = document.createElement("ul");
+    var stack = [{ level: 0, ul: rootList, li: null }];
+
+    headings.forEach(function (heading, i) {
+      if (!heading.id) {
+        heading.id = "toc-heading-" + i;
+      }
+      var level = parseInt(heading.tagName.slice(1), 10);
+
+      while (stack.length > 1 && stack[stack.length - 1].level >= level) {
+        stack.pop();
+      }
+
+      var parent = stack[stack.length - 1];
+      if (!parent.ul) {
+        parent.ul = document.createElement("ul");
+        parent.li.appendChild(parent.ul);
+        parent.li.classList.add("toc-has-children");
+
+        var caret = document.createElement("span");
+        caret.className = "toc-caret";
+        caret.setAttribute("role", "button");
+        caret.setAttribute("aria-label", "Toggle section");
+        var parentLink = parent.li.querySelector("a");
+        parentLink.insertBefore(caret, parentLink.firstChild);
+      }
+
+      var li = document.createElement("li");
+      var a = document.createElement("a");
+      a.href = "#" + heading.id;
+      a.textContent = heading.textContent.trim().replace(/\s*#\s*$/, "");
+      a.className = "toc-" + heading.tagName.toLowerCase();
+      a.dataset.target = heading.id;
+      li.appendChild(a);
+      parent.ul.appendChild(li);
+
+      stack.push({ level: level, ul: null, li: li });
+    });
+
+    toc.appendChild(rootList);
+    document.body.appendChild(toc);
+
+    toc.addEventListener("click", function (e) {
+      var caret = e.target.closest(".toc-caret");
+      if (!caret) return;
+      e.preventDefault();
+      e.stopPropagation();
+      caret.closest("li").classList.toggle("toc-collapsed");
+    });
+
+    var links = toc.querySelectorAll("a");
+    var observer = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (entry) {
+          var link = toc.querySelector('a[data-target="' + entry.target.id + '"]');
+          if (!link) return;
+          if (entry.isIntersecting) {
+            links.forEach(function (l) { l.classList.remove("active"); });
+            link.classList.add("active");
+          }
+        });
+      },
+      { rootMargin: "0px 0px -70% 0px" }
+    );
+
+    headings.forEach(function (heading) {
+      observer.observe(heading);
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var alertLabels = {
+      NOTE: "Note",
+      TIP: "Tip",
+      IMPORTANT: "Important",
+      WARNING: "Warning",
+      CAUTION: "Caution"
+    };
+    var alertIcons = {
+      NOTE: "ℹ️",
+      TIP: "💡",
+      IMPORTANT: "❗",
+      WARNING: "⚠️",
+      CAUTION: "🛑"
+    };
+
+    document.querySelectorAll(".main-content blockquote").forEach(function (bq) {
+      var p = bq.querySelector("p:first-child");
+      if (!p || !p.firstChild || p.firstChild.nodeType !== Node.TEXT_NODE) return;
+
+      var text = p.firstChild.textContent;
+      var match = text.match(/^\s*\[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*/i);
+      if (!match) return;
+
+      var type = match[1].toUpperCase();
+      p.firstChild.textContent = text.slice(match[0].length);
+
+      bq.classList.add("gh-alert", "gh-alert-" + type.toLowerCase());
+
+      var title = document.createElement("p");
+      title.className = "gh-alert-title";
+      title.textContent = alertIcons[type] + " " + alertLabels[type];
+      bq.insertBefore(title, bq.firstChild);
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    var content = document.querySelector(".main-content");
+    if (!content) return;
+
+    var overlay = document.createElement("div");
+    overlay.className = "lightbox-overlay";
+
+    var overlayImg = document.createElement("img");
+    overlay.appendChild(overlayImg);
+
+    var closeBtn = document.createElement("button");
+    closeBtn.className = "lightbox-close";
+    closeBtn.setAttribute("aria-label", "Close");
+    closeBtn.innerHTML = "&times;";
+    // Appended inside overlay (not document.body) so it inherits the
+    // overlay's own visibility/opacity state via CSS instead of needing a
+    // separately toggled `hidden` attribute, which display:flex overrode.
+    overlay.appendChild(closeBtn);
+
+    document.body.appendChild(overlay);
+
+    function openLightbox(img) {
+      overlayImg.src = img.currentSrc || img.src;
+      overlayImg.alt = img.alt || "";
+      overlay.classList.add("lightbox-open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeLightbox() {
+      overlay.classList.remove("lightbox-open");
+      document.body.style.overflow = "";
+    }
+
+    content.querySelectorAll("img").forEach(function (img) {
+      img.addEventListener("click", function () {
+        openLightbox(img);
+      });
+    });
+
+    overlay.addEventListener("click", closeLightbox);
+    closeBtn.addEventListener("click", closeLightbox);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeLightbox();
+    });
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    if (!window.mermaid) return;
+
+    // Kramdown has no built-in mermaid renderer - a ```mermaid fenced code
+    // block just comes out as <pre><code class="language-mermaid">raw text
+    // (unlike GitHub, which renders these natively). Swap each one for a
+    // <div class="mermaid"> containing the decoded source, then let the
+    // mermaid.js library (loaded above) render it client-side.
+    var blocks = document.querySelectorAll("code.language-mermaid");
+    if (!blocks.length) return;
+
+    blocks.forEach(function (code) {
+      var pre = code.closest("pre") || code;
+      var div = document.createElement("div");
+      div.className = "mermaid";
+      div.textContent = code.textContent;
+      pre.replaceWith(div);
+    });
+
+    mermaid.initialize({ startOnLoad: false, theme: "dark" });
+    mermaid.run({ querySelector: ".mermaid" });
+  });
+</script>
