@@ -51,6 +51,7 @@ The lab focuses on an on-premises enterprise network emulating a small organizat
 8.  **Attack Simulation:** Execute external threat scenarios originating from WAN_NET against lab infrastructure and the DMZ-hosted agentic AI application to validate detection and prevention controls.
 9.  **Agentic AI Security Research:** Deploy `AGENTICAI-01` — an intentionally vulnerable agentic AI application — in the DMZ and systematically explore its attack surface, including prompt injection, tool abuse, and privilege escalation through AI-driven actions.
 10. **Technical Documentation:** Maintain comprehensive records of lab architecture and findings.
+
 ---
 
 ## Lab Architecture & Design
