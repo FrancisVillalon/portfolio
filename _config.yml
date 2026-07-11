@@ -1,7 +1,7 @@
 title: Francis Villalon - Portfolio
 description: CTF writeups, self-study labs, and home lab documentation covering digital forensics, incident response, malware analysis, and memory forensics.
-url: "https://francisvillalon.github.io"
-baseurl: "/portfolio"
+url: "https://fdv.sh"
+baseurl: ""
 
 remote_theme: just-the-docs/just-the-docs
 
