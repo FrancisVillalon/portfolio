@@ -6,3 +6,6 @@ _site/
 Gemfile.lock
 .env
 .bundle-cache/
+.DS_Store
+*/.DS_Store
+scripts/

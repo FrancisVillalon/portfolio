@@ -31,9 +31,6 @@ include:
 exclude:
   - "cyberdefender-writeups/under review/"
   - ".claude/"
-  - "cyberdefender-writeups/README.md"
-  - "memlabs-writeups/README.md"
-  - "cybersecurity-home-lab/README.md"
   - "README.md"
   - "Gemfile"
   - "Gemfile.lock"

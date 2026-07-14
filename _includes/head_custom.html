@@ -488,7 +488,65 @@
 
   @media (max-width: 1400px) {
     #page-toc {
-      display: none;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(280px, 80vw);
+      max-height: none;
+      margin: 0;
+      padding: 28px 20px;
+      background: #0d1117;
+      border-left: 1px solid rgba(128, 128, 128, 0.3);
+      box-shadow: -8px 0 24px rgba(0, 0, 0, 0.45);
+      transform: translateX(100%);
+      transition: transform 0.25s ease;
+      /* Above the backdrop (z-index 19) so the drawer's own links stay
+         clickable - otherwise the full-viewport backdrop sits on top of
+         everything, including the drawer, and swallows all clicks. */
+      z-index: 20;
+    }
+
+    #page-toc.page-toc-open {
+      transform: translateX(0);
+    }
+  }
+
+  .page-toc-toggle {
+    display: none;
+  }
+
+  @media (max-width: 1400px) {
+    .page-toc-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(128, 128, 128, 0.35);
+      background: #21262d;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      z-index: 21;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  .page-toc-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 19;
+  }
+
+  @media (max-width: 1400px) {
+    .page-toc-backdrop.page-toc-open {
+      display: block;
     }
   }
 
@@ -773,12 +831,51 @@
     toc.appendChild(rootList);
     document.body.appendChild(toc);
 
+    var backdrop = document.createElement("div");
+    backdrop.className = "page-toc-backdrop";
+    document.body.appendChild(backdrop);
+
+    var toggle = document.createElement("button");
+    toggle.className = "page-toc-toggle";
+    toggle.setAttribute("aria-label", "Toggle table of contents");
+    toggle.innerHTML = "&#9776;";
+    document.body.appendChild(toggle);
+
+    function openToc() {
+      toc.classList.add("page-toc-open");
+      backdrop.classList.add("page-toc-open");
+    }
+
+    function closeToc() {
+      toc.classList.remove("page-toc-open");
+      backdrop.classList.remove("page-toc-open");
+    }
+
+    toggle.addEventListener("click", function () {
+      if (toc.classList.contains("page-toc-open")) {
+        closeToc();
+      } else {
+        openToc();
+      }
+    });
+
+    backdrop.addEventListener("click", closeToc);
+
     toc.addEventListener("click", function (e) {
       var caret = e.target.closest(".toc-caret");
-      if (!caret) return;
-      e.preventDefault();
-      e.stopPropagation();
-      caret.closest("li").classList.toggle("toc-collapsed");
+      if (caret) {
+        e.preventDefault();
+        e.stopPropagation();
+        caret.closest("li").classList.toggle("toc-collapsed");
+        return;
+      }
+
+      // On the narrow-screen drawer, tapping a heading link should also
+      // close the drawer so it doesn't sit on top of the section just
+      // navigated to.
+      if (e.target.closest("a")) {
+        closeToc();
+      }
     });
 
     var links = toc.querySelectorAll("a");
