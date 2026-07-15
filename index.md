@@ -26,7 +26,7 @@ CTF writeups, self-study labs, and home lab documentation covering digital foren
   <a href="{{ '/cyberdefender-writeups/' | relative_url }}" class="category-card">
     <div class="category-card-title">Cyberdefenders</div>
     <p>Blue team CTF writeups covering malware analysis, endpoint forensics, network forensics, reverse engineering, threat hunting and more.</p>
-    <span class="category-count">26 writeups</span>
+    <span class="category-count">27 writeups</span>
   </a>
   <a href="{{ '/memlabs-writeups/' | relative_url }}" class="category-card">
     <div class="category-card-title">MemLabs</div>
