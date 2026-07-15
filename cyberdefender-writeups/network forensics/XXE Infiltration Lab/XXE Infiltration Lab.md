@@ -58,7 +58,7 @@ Furthermore, if we follow the `HTTP Stream` of packet `88316` we will see that t
 
 ![](images/f2c9220c3f60b5c23e1b6def5605bf716456973269a24d19d35e27e88605aad7.webp)
 
-__HTTP Stream showing the successful XXE attack__
+*HTTP Stream showing the successful XXE attack*
 
 **Answer:** `/review/upload.php`
 
@@ -74,7 +74,7 @@ We already found this in the last question but to be explicit we can make the fo
 
 ![](images/024f73b615359682f5cf427f3380b815ff9b6cf69290632016d743f6a7845353.webp)
 
-__Filtered output showing request body of earliest request__
+*Filtered output showing request body of earliest request*
 
 From the request body we can determine the first file uploaded was `TheGreatGatsby.xml`
 
@@ -91,7 +91,7 @@ To answer this question, we just have to identify a POST request with a payload 
 
 ![](images/6ee3af4e93e4b8cdb64616988f0dd8b5ce569eaba51108c2b4396f3f4973a53c.webp)
 
-__POST request made by attacker to access `config.php`__
+*POST request made by attacker to access `config.php`*
 
 We can see from the above output that the attacker accessed `config.php`.
 Take note that the packet number is `88336`.
@@ -110,7 +110,7 @@ Let's follow the http stream and see what is returned to the attacker.
 
 ![](images/d49da8890c65cb23731735ee563e71ff343c220ee4470f886ea003cc3e144710.webp)
 
-__HTTP Stream of POST request__
+*HTTP Stream of POST request*
 
 In the HTTP stream, we can see the entire contents of `config.php` was returned to the attacker.
 In the contents of this file was the password.
@@ -129,7 +129,7 @@ Now we just have to filter the `pcap` for `mysql.login_request` and see which on
 
 ![](images/8df20a6688f3b7a755d3759ec7e536d3e4155d9b6fa697e8270a64424ab2dffd.webp)
 
-__Login request made after exposure__
+*Login request made after exposure*
 
 We can tell that the above packet corresponds to the first login using exposed credentials as the packet number is closest to the packet in which the exposure happened.
 
@@ -146,7 +146,7 @@ The intuition is that, the attacker exposed some credentials as well as the serv
 
 ![](images/aaf080e2b9220e44dcf2d2461cc10341f8b8c3879224dc5abaf6412c2f39b31d.webp)
 
-__Request body of last POST request captured__
+*Request body of last POST request captured*
 
 We can see from the above output that the last post request captured defines an external entity `&payload` that points to a remote file at `http://203.0.113.15/booking.php`. What ever is returned there is then used in another entity `internals`.
 The `internals` entity reads a resource defined by the `&payload` then base64 encodes it. The base64 encoding is probably used to by pass basic content filters.

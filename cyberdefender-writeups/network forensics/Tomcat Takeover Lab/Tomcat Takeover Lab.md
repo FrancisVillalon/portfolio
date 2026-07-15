@@ -30,7 +30,7 @@ Then check the output
 
 ![](images/image-631.webp)
 
-__output of filter__
+*output of filter*
 
 We can already see some interesting traffic as `14.0.0.120` is sending packets with the `SYN` flag set to many different ports with each requests having little to no delay in between. This is characteristic of port scanning.
 
@@ -59,13 +59,13 @@ We can determine which ports are open by doing the following filter,
 
 ![](images/image-634.webp)
 
-__output of filter__
+*output of filter*
 
 Then going to `Statistics -> Endpoints -> TCP`
 
 ![](images/image-635.webp)
 
-__statistics of filter__
+*statistics of filter*
 
 We can see the open ports are `22`,`8009` and `8080`.
 The interesting one here is `8080` as that is a http port.
@@ -73,7 +73,7 @@ If we filter for `http` we can will see when the attacker managed to find the pa
 
 ![](images/image-636.webp)
 
-__http traffic showing directory enumeration__
+*http traffic showing directory enumeration*
 
 We can also see from the output that the attacker is using an automated tool to enumerate the directories.
 
@@ -87,7 +87,7 @@ If we click into any of the packets from the attacker in the previous question w
 
 ![](images/image-637.webp)
 
-__User agent set__
+*User agent set*
 
 **Answer:** `gobuster`
 
@@ -114,7 +114,7 @@ The rationale behind this is that we are looking for http traffic targeting the 
 
 ![](images/image-638.webp)
 
-__Output of filter__
+*Output of filter*
 
 If we look near the bottom, we will see that the attacker managed to navigate through `/manager` and the server stopped responding with `401 Unauthorized`.
 
@@ -122,7 +122,7 @@ If we click into the first packet at `No. 20553` we will see the credentials in 
 
 ![](images/image-639.webp)
 
-__Credentials in plaintext__
+*Credentials in plaintext*
 
 **Answer:** `admin:tomcat`
 
@@ -135,7 +135,7 @@ Which will show us the following,
 
 ![](images/image-640.webp)
 
-__POST request filtered__
+*POST request filtered*
 
 If we look under the `multipart/form-data` we will see the filename is `JXQOZY.war`.
 
@@ -152,13 +152,13 @@ We set the following filter, `tcp.flags.push == 1 && ip.src == 14.0.0.120 && !ht
 
 ![](images/image-641.webp)
 
-__Filtered packets__
+*Filtered packets*
 
 If we inspect the packets we can see that it contains the commands that the attacker was sending. If we click on frame no. `20666` we will see in the exact command that was scheduled by the attacker to establish persistence.
 
 ![](images/image-642.webp)
 
-__Attacker establishing persistence__
+*Attacker establishing persistence*
 
 The attacker here is setting a reverse shell to run every minute on the machine.
 

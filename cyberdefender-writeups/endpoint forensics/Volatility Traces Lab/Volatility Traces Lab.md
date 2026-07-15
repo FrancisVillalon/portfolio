@@ -23,7 +23,7 @@ More often than not, this yields some fast and quick wins.
 
 ![](images/image-643.webp)
 
-__Tail end of the output of the command__
+*Tail end of the output of the command*
 
 If we look near the bottom, we will see two very suspicious invocations of `powershell.exe`.
 These two lines are adding a microsoft defender exclusion for two executables which are
@@ -36,14 +36,14 @@ Let's run a grep on `powershell` to see which process spawned it.
 
 ![](images/image-644.webp)
 
-__output of grep command__
+*output of grep command*
 
 Looks like a process with PID `4596` spawned it or invoked it.
 Let's grep for `4596` and see what we find.
 
 ![](images/image-645.webp)
 
-__output of grep `4596`__
+*output of grep `4596`*
 
 The process that spawned it is `InvoiceCheckLi` which likely corresponds to `C:\Users\Lee\AppData\Local\Temp\InvoiceCheckList.exe`.
 
@@ -77,7 +77,7 @@ We already identified this on our `cmdline` output and the answer is `Add-MpPref
 
 ![](images/image-646.webp)
 
-__cmdline output__
+*cmdline output*
 
 **Answer:**`Add-MpPreference`
 

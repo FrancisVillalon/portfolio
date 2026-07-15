@@ -28,7 +28,7 @@ Which gets us,
 
 ![](images/image-854.webp)
 
-__Available source types__
+*Available source types*
 
 This dataset contains entirely `zeek` and `suricata` logs.
 
@@ -52,14 +52,14 @@ Which gets us,
 
 ![](images/image-855.webp)
 
-__Snippet of search result__
+*Snippet of search result*
 
 Scrolling down, we will see a server that was connected to using with `http_user_agent` value of `Download`.
 This is not a standard `http_user_agent` and if we look at the `url`s that were accessed. We will see that every `url` is only corresponding to executable files. There was no landing page or any other resources, the endpoint connecting to this server purely just downloaded some files.
 
 ![](images/image-856.webp)
 
-__Suspicious IP__
+*Suspicious IP*
 
 Furthermore, the naming of the both the endpoints and the resources seem purposefully obfuscated or meaningless which is in stark contrast to the other entries found in our search.
 
@@ -81,7 +81,7 @@ index=* sourcetype="zeek:dns" 195.88.191.59
 
 ![](images/c2ada8ce3bfe9760758b8fa0fc33f3a96f26587e94cc7c7d697ac5cca10d06ce.webp)
 
-__DNS query results__
+*DNS query results*
 
 Which tells us that the resolved domain name is `nocomcom.com`
 
@@ -102,7 +102,7 @@ This gives us the IP of the targeted system under `values(src_ip)` which is `147
 
 ![](images/image-855.webp)
 
-__Query result__
+*Query result*
 
 **Answer:** `147.32.84.165`
 
@@ -122,7 +122,7 @@ Which gives us,
 
 ![](images/image-857.webp)
 
-__unique files transferred__
+*unique files transferred*
 
 This shows us unique 5 unique results which is our answer.
 
@@ -156,13 +156,13 @@ Which tells us that the `md5` hash value of the `.txt` file is `564048b35da9d447
 
 ![](images/image-858.webp)
 
-__Search results__
+*Search results*
 
 Using `OSINT` platforms like `VirusTotal` we can find the `sha256` hash of this file.
 
 ![](images/image-859.webp)
 
-__`VirusTotal` Reports__
+*`VirusTotal` Reports*
 
 Therefore our answer is `6fbc4d506f4d4e0a64ca09fd826408d3103c1a258c370553583a07a4cb9a6530`.
 

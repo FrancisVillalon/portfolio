@@ -18,7 +18,7 @@ The protocol hierarchy statistics, viewed under `Statistics > Protocol Hierarchy
 
 ![](images/image-809.webp)
 
-__Protocol hierarchy statistics__
+*Protocol hierarchy statistics*
 
 1. `44.5%` of all packets are classified under `SOCKS` protocol
 2. `86.5%` of all bytes captured are under `SOCKS` protocol, bytes captured is disproportionately attributed to this particular protocol
@@ -29,7 +29,7 @@ To identify what parties were involved, endpoint analysis was performed next.
 
 ![](images/image-810.webp)
 
-__Endpoint statistics__
+*Endpoint statistics*
 
 The provided capture is framed as `highlighting attacker's interaction with honeypots` and there are only 2 IP addresses in the capture. Of the two in the capture, only one falls within a public/external IP range, allowing the following roles to be established tentatively:
 - The attacker's IP address is likely `98.114.205.102`
@@ -39,14 +39,14 @@ With the initial roles established, focus turned to conversation-level metrics t
 
 ![](images/image-811.webp)
 
-__Conversation statistics__
+*Conversation statistics*
 
 The duration of the conversation between `98.114.205.102` and `192.150.11.111` lasted `16.2192` seconds.
 Furthermore, 5 `TCP` sessions were captured on ports `445`, `1957`, `1080` and `8884`.
 
 ![](images/image-812.webp)
 
-__Captured `TCP` sessions__
+*Captured `TCP` sessions*
 
 These ports map to the following services
 - `445` : `smb`
@@ -87,7 +87,7 @@ The `smb` or `smb2` traffic reveal anomalous traffic where the attacker sent a r
 
 ![](images/image-814.webp)
 
-__Anomalous `smb` traffic__
+*Anomalous `smb` traffic*
 
 A Google search of `DsRoleUpgradeDownlevelServer` as well as `\lsarpc` points to `CVE-2003-0533` as detailed [here](https://nvd.nist.gov/vuln/detail/CVE-2003-0533).
 This is a buffer overflow exploit that allows for arbitrary code execution via a packet that causes the `DsRolerUpgradeDownleveServer` function to create long debug entries for the `DCPROMO.LOG` log file.
@@ -96,14 +96,14 @@ The `tcp` stream reveals a long line of padding using `ascii` 1.
 
 ![](images/image-815.webp)
 
-__`tcp` stream 1__
+*`tcp` stream 1*
 
 Viewing this stream as raw bytes will reveal a long section of bytes of value `0x90` which is the op code for `nop`.
 There is a section of bytes that looks like actual data sandwiched in between the large block of `nop` op codes.
 
 ![](images/image-816.webp)
 
-__nop sled__
+*nop sled*
 
 This is highly characteristic of a buffer overflow exploit and we are likely looking at the actual shell code used by the actor.
 Saving the conversation, particularly the traffic from `98.114.205.102` to `192.150.11.111`, will enable further analysis.
@@ -113,19 +113,19 @@ The dump is then passed to `scdbg` with the following parameters,
 
 ![](images/image-817.webp)
 
-__scdbg configuration__
+*scdbg configuration*
 
 This will yield the following,
 
 ![](images/image-819.webp)
 
-__scdbg results__
+*scdbg results*
 
 The first results, at index `0` which corresponds to offset `0x3f5`, is the shell code we are looking for and it reveals the following,
 
 ![](images/image-820.webp)
 
-__`scdbg` report and dump__
+*`scdbg` report and dump*
 
 The shell code decodes itself in memory using the instruction `xor byte [edx+ecx], 0x99`.
 Therefore, the key it used to encode itself is `0x99`
@@ -151,7 +151,7 @@ By using the filter `tcp.flags.push == 1` we can see the plain text commands tha
 
 ![](images/image-826.webp)
 
-__command issued by attacker__
+*command issued by attacker*
 
 This command is
 
@@ -183,19 +183,19 @@ Knowing that the victim connects back to the attacker on port 8884, the traffic 
 
 ![](images/image-829.webp)
 
-__`TCP` Handshake completed__
+*`TCP` Handshake completed*
 
 Following and retrieving the `TCP stream` will then give us
 
 ![](images/image-830.webp)
 
-__`TCP` Stream__
+*`TCP` Stream*
 
 Which when decoded is the following set of commands
 
 ![](images/image-831.webp)
 
-__Decoded traffic__
+*Decoded traffic*
 
 These commands correspond to `FTP`'s active mode and align with the script identified earlier.
 Notably, the `PORT` command, `PORT 192,150,11,111,4,56`, instructs the server to connect back to the victim on port `1080` for the data transfer.
@@ -210,7 +210,7 @@ This is evident in the network capture as well, where we will see that no known 
 
 ![](images/image-832.webp)
 
-__`ssms.exe` being transferred__
+*`ssms.exe` being transferred*
 
 Having identified that a file was transferred we can use `ZUI/Brim` to easily retrieve some metadata about the file. Load the `pcap` into `ZUI/Brim` then perform the following query.
 
@@ -223,7 +223,7 @@ Which gives us,
 
 ![](images/image-827.webp)
 
-__`ZUI` output__
+*`ZUI` output*
 
 The output tells us it is a `dos executable` which is in line with what we have investigated thus far.
 ## Checking the malicious file using OSINT
@@ -232,7 +232,7 @@ Passing the retrieved `sha1` hash , `ac3cdd673f5126bc49faa72fb52284f513929db4`, 
 
 ![](images/image-828.webp)
 
-__`VirusTotal` report__
+*`VirusTotal` report*
 
 The file `ssms.exe` is reported as a backdoor trojan.
 
@@ -254,7 +254,7 @@ This creates a `asm.txt` containing the decoded assembly instructions.
 
 ![](images/image-821.webp)
 
-__decoded assembly instructions__
+*decoded assembly instructions*
 
 
 >[!NOTE]
@@ -273,14 +273,14 @@ grep 'call' asm.txt -A 2
 
 ![](images/image-824.webp)
 
-__results of grep__
+*results of grep*
 
 This makes a `jmp` to `0x5bd` which just calls `0x4b1`.
 Thereby, loading the memory address of the shell code into `edx`.
 
 ![](images/image-825.webp)
 
-__instruction at `0x5bd`__
+*instruction at `0x5bd`*
 
 ### PEB Walk
 Given that we know the code accesses `PEB (fs30)`, the relevant assembly instructions can be viewed using `grep`
@@ -291,14 +291,14 @@ grep 'fs.*30' asm.txt -A 10
 
 ![](images/image-822.webp)
 
-__assembly instructions that accesses `fs30` __
+*assembly instructions that accesses `fs30` *
 
 These instructions are a complete match to the ones found in this [document](https://archives.phrack.org/issues/62/7.txt) that details what is shell code, its uses and techniques.
 Specifically, sections `2.b.iv` and `2.b.v`.
 
 ![](images/image-823.webp)
 
-__Documentation for how shell code uses `Kernel32` base memory__
+*Documentation for how shell code uses `Kernel32` base memory*
 
 The method described here is called `PEB Walk`. It locates `kernel32.dll`'s base address by accessing the `fs` segment register to reach the `PEB`, then walking the loaded module list until it finds `kernel32.dll`'s entry and reads its base address.
 
@@ -337,7 +337,7 @@ We can check this [here](https://www.geolocation.com/?ip=98.114.205.102#ipresult
 
 ![](images/image-835.webp)
 
-__`Geolocation` search result__
+*`Geolocation` search result*
 
 
 **Answer:** `US`
@@ -350,7 +350,7 @@ As seen in the triage, under `Statistics > Conversation > TCP` in `Wireshark`, 5
 
 ![](images/image-812.webp)
 
-__Captured `TCP` sessions__
+*Captured `TCP` sessions*
 
 **Answer:** `5`
 
@@ -362,7 +362,7 @@ As seen in the triage, under `Statistics > Conversation > IPv4` in `Wireshark`, 
 
 ![](images/image-811.webp)
 
-__Conversation statistics__
+*Conversation statistics*
 
 
 **Answer:** `16`
@@ -375,7 +375,7 @@ From the analysis of the network capture we found the exploit is `CVE-2003-0533`
 
 ![](images/image-814.webp)
 
-__Anomalous `smb` traffic__
+*Anomalous `smb` traffic*
 
 **Answer:** `CVE-2003-0533`
 
@@ -426,7 +426,7 @@ On the `VirusTotal` report, navigating to `Details` will show the following,
 
 ![](images/image-834.webp)
 
-__Report details__
+*Report details*
 
 Therefore, the answer is `2007-06-27`.
 

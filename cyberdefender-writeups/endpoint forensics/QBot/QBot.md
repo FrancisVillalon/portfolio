@@ -15,7 +15,7 @@ To get started on the investigation, let's gather some basic information about t
 
 ![](images/image-841.webp)
 
-__`windows.info.Info` output__
+*`windows.info.Info` output*
 
 The memory dump is of a system running Windows 10 and the captured system time was `2023-10-12 12:38:01`.
 
@@ -24,14 +24,14 @@ Running `windows.pslist` gets us the following,
 
 ![](images/image-838.webp)
 
-__Snippet of `pslist` output__
+*Snippet of `pslist` output*
 
 The output of the command is directed to a file ,`pslist.out`, so we do not need to keep rerunning the command.
 To get the low hanging fruit out of the way, let's `grep` for `cmd` and `powershell` to see if any of these processes were captured.
 
 ![](images/image-839.webp)
 
-__grep result__
+*grep result*
 
 No instances of `cmd` or `powershell` were captured in this memory dump.
 A manual scan of the process list reveals a captured `EXCEL.EXE` process during the time of the suspicious activity.
@@ -42,14 +42,14 @@ Running `windows.cmdline` gets us the following,
 
 ![](images/image-840.webp)
 
-__Snippet of `cmdline` output__
+*Snippet of `cmdline` output*
 
 `cmdline` can give us an idea of how a program was invoked.
 Using `grep` to find `excel.exe` reveals that it was invoked with the argument `/dde`.
 
 ![](images/image-842.webp)
 
-__`grep` of `excel`__
+*`grep` of `excel`*
 
 A Google search of what this argument is will tell us that `/dde` is a legacy command-line switch for Office applications that tells the app to launch as a `DDE` server.
 This is odd because a normal user will rarely if ever find a legitimate use case for this mode in modern workflows especially since launching office applications in `DDE` server mode is actually disabled by default in patched recent versions of office apps.
@@ -64,46 +64,46 @@ The reason for doing this is to see if we can further our investigation by check
 
 ![](images/image-843.webp)
 
-__Running `windows.dumpfiles`__
+*Running `windows.dumpfiles`*
 
 After the plugin is done running, check the dumped files if any of them have an `excel` file extension.
 
 ![](images/image-844.webp)
 
-__Checking for excel files__
+*Checking for excel files*
 
 From the output, `excel` had an open file handle to `Payment.xls`.
 Checking the location of this file on disk through the provided `windows.filescan.txt` artifact shows that this file was opened from the `\Users\PC-28\Downloads`.
 
 ![](images/image-845.webp)
 
-__Finding location of this file on disk__
+*Finding location of this file on disk*
 
 Let's retrieve the checksum of this file and use `OSINT` to check if there are any reports on this file.
 
 ![](images/image-846.webp)
 
-__Checksum of `Payment.xls`__
+*Checksum of `Payment.xls`*
 
 Submitting this hash to `VirusTotal` tells us that this file was flagged by 37 out of 62 security vendors as malicious.
 Most of which are labelling it as a downloader `trojan`.
 
 ![](images/image-847.webp)
 
-__`VirusTotal` report__
+*`VirusTotal` report*
 
 Going under the `Behaviour` tab we will also see that it matches rule `MALWARE-CNC Win.Trojan.IcedID download attempt`.
 `IcedID` is a modular banking malware and is known to be downloaded by `emotet` in multiple campaigns ([Source](https://attack.mitre.org/software/S0483/)) .
 
 ![](images/image-848.webp)
 
-__Rule matching__
+*Rule matching*
 
 Under `Network Communication > IP Traffic` is a list of IPs that the malware contacts as well as the port used.
 
 ![](images/image-849.webp)
 
-__List of IPs__
+*List of IPs*
 
 The next logical step is then to check if the captured memory dump has made any connections to these known malicious IPs.
 
@@ -118,7 +118,7 @@ A grep of the netscan file shows that the end point has connected to 2 of the 3 
 
 ![](images/image-850.webp)
 
-__`grep` of netscan file__
+*`grep` of netscan file*
 
 # Summary of findings
 The analysis of the memory dump reveals a malware infection initiated through a malicious `excel` document.
@@ -182,7 +182,7 @@ This is trivially answered using the `VirusTotal` report by navigating to `Detai
 
 ![](images/image-852.webp)
 
-__Creation Time__
+*Creation Time*
 
 
 **Answer:** `2015-06-05 18:17`

@@ -20,7 +20,7 @@ This will allow us to have an overview of what IP Addresses are talking to what.
 
 ![](images/image-570.webp)
 
-__Wireshark Conversations output__
+*Wireshark Conversations output*
 
 We can see from the screenshot the following IPs.
 1. `111.224.180.128`
@@ -32,7 +32,7 @@ If we inspect the http traffic of `135.143.142.5` we will see that this is likel
 
 ![](images/image-571.webp)
 
-__Snippet of traffic from `135.143.142.5`__
+*Snippet of traffic from `135.143.142.5`*
 
 However, `111.224.180.128` not only constitutes most of packets captured in this `pcap`. We will see that the traffic he is producing is highly suspicious.
 
@@ -40,7 +40,7 @@ For instance, if we filter using `ip.addr = 111.224.180.128 && http` we will see
 
 ![](images/image-572.webp)
 
-__Snippet of traffic produced by `111.224.180.128`__
+*Snippet of traffic produced by `111.224.180.128`*
 
 This is a common method used in reconnaissance used by attackers to determine what URIs are accessible on the website.
 It is very likely that `111.224.180.128` is the attacker as this pattern of traffic is not consistent with that of a normal user.
@@ -57,7 +57,7 @@ To determine what tool is being used we can inspect the request body of each att
 
 ![](images/image-574.webp)
 
-__Request body of one packet in the directory enumeration__
+*Request body of one packet in the directory enumeration*
 
 We can see from the above, that the user agent is set to `gobuster 3.6` which is not a browser.
 `gobuster 3.6` is a popular open source tool for brute forcing directories.
@@ -73,7 +73,7 @@ We will do that using the filter `ip.src == 111.224.180.128 && http && !(http.us
 
 ![](images/image-576.webp)
 
-__Traffic of attacker that is not directory enumeration__
+*Traffic of attacker that is not directory enumeration*
 
 There are 2 POST requests in the traffic that look highly suspect. 
 The first one is a benign request whereas the second one has a payload in it's body.
@@ -94,7 +94,7 @@ What we can do now is take note of the time of the payload reaching the server a
 
 ![](images/image-578.webp)
 
-__`135.143.142.5` traffic to server__
+*`135.143.142.5` traffic to server*
 
 We know the attack happened at `12:08` and it was posted to the `/reviews.php`.
 Therefore, we are looking for when `135.143.142.5` accessed `/reviews.php` after `12:08`.
@@ -111,7 +111,7 @@ We can look at traffic beyond that point from the attacker.
 
 ![](images/image-580.webp)
 
-__Traffic from attack__
+*Traffic from attack*
 
 If we focus at the traffic after `12:09` and monitor how `PHPSESSID` changes we will find the answer.
 The first get request, packet number `10138` has a `PHPSESSID` that belongs to the attacker when he first authenticated with the website.
@@ -120,7 +120,7 @@ If we go and inspect the traffic of `135.143.142.5` we will find that this sessi
 
 ![](images/image-581.webp)
 
-__`135.143.142.5` session ID__
+*`135.143.142.5` session ID*
 
 **Answer:**`lqkctf24s9h9lg67teu8uevn3q`
 
@@ -132,7 +132,7 @@ If we continue the inspect the attacker traffic we will see some interesting GET
 
 ![](images/image-582.webp)
 
-__Suspicious GET requests__
+*Suspicious GET requests*
 
 The above screenshot shows suspicious requests being made by the attacker. 
 These requests are characteristic of a local file inclusion attack where by passing a relative file path, the attacker is able to read the contents of local files.
@@ -150,7 +150,7 @@ The file being accessed can be trivially spotted in the HTTP parameters.
 
 ![](images/image-583.webp)
 
-__Request body of suspicious request__
+*Request body of suspicious request*
 
 From the body we can tell that the user is trying to access `/etc/passwd`
 
