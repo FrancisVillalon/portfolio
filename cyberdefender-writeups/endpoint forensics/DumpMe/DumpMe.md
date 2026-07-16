@@ -4,6 +4,7 @@ parent: Endpoint Forensics
 grand_parent: Cyberdefenders
 nav_order: 5
 difficulty: Medium
+date: 2026-05-30
 ---
 
 #endpoint-forensics #volatility2 #powershell #shimcache #strings #cyberdefender-medium #reviewed #finished 

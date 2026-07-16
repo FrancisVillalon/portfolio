@@ -4,6 +4,7 @@ parent: Network Forensics
 grand_parent: Cyberdefenders
 nav_order: 1
 difficulty: Medium
+date: 2026-07-04
 ---
 
 #cyberdefender-medium #zui/brim #wireshark #scdbg #network-forensics #finished #reviewed

@@ -4,6 +4,7 @@ parent: Endpoint Forensics
 grand_parent: Cyberdefenders
 nav_order: 6
 difficulty: Medium
+date: 2026-07-07
 ---
 
 #cyberdefender-medium #endpoint-forensics #finished #reviewed

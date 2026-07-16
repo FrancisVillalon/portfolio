@@ -4,6 +4,7 @@ parent: Network Forensics
 grand_parent: Cyberdefenders
 nav_order: 8
 difficulty: Easy
+date: 2026-06-11
 ---
 
 #network-forensics #cyberdefender-easy #wireshark #zui/brim #finished #reviewed

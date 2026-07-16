@@ -4,6 +4,7 @@ parent: Threat Hunting
 grand_parent: Cyberdefenders
 nav_order: 2
 difficulty: Easy
+date: 2026-07-10
 ---
 
 #cyberdefender-easy #threat-hunting #splunk #finished #reviewed

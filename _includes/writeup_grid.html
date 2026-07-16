@@ -1,11 +1,47 @@
 <div class="writeup-grid" markdown="0">
-  {% assign children = site.pages | where: "parent", page.title | sort: "nav_order" %}
+  {% assign children = site.pages | where: "parent", page.title %}
+  {% assign easy = children | where: "difficulty", "Easy" | sort: "nav_order" %}
+  {% assign medium = children | where: "difficulty", "Medium" | sort: "nav_order" %}
+  {% assign hard = children | where: "difficulty", "Hard" | sort: "nav_order" %}
+  {% assign unrated = children | where_exp: "item", "item.difficulty != 'Easy'" %}
+  {% assign unrated = unrated | where_exp: "item", "item.difficulty != 'Medium'" %}
+  {% assign unrated = unrated | where_exp: "item", "item.difficulty != 'Hard'" | sort: "nav_order" %}
+  {% assign children = hard | concat: medium | concat: easy | concat: unrated %}
+
+  {% assign has_difficulty = false %}
+  {% assign has_date = false %}
   {% for child in children %}
-  <a href="{{ child.url | relative_url }}" class="writeup-card">
-    <span class="writeup-card-title">{{ child.title }}</span>
-    {% if child.difficulty %}
-    <span class="difficulty-pill difficulty-{{ child.difficulty | downcase }}">{{ child.difficulty }}</span>
-    {% endif %}
-  </a>
+    {% if child.difficulty %}{% assign has_difficulty = true %}{% endif %}
+    {% if child.date %}{% assign has_date = true %}{% endif %}
   {% endfor %}
+
+  {% if has_date %}
+  {% assign children = children | sort: "date" | reverse %}
+  {% endif %}
+
+  {% if has_difficulty or has_date %}
+  <div class="writeup-toolbar">
+    <label for="writeup-sort-{{ page.url | slugify }}" class="writeup-sort-label">Sort by</label>
+    <select class="writeup-sort-select" id="writeup-sort-{{ page.url | slugify }}">
+      {% if has_date %}<option value="recent" selected>Most Recent</option>{% endif %}
+      {% if has_difficulty %}<option value="difficulty"{% unless has_date %} selected{% endunless %}>Difficulty</option>{% endif %}
+      <option value="alpha">A&ndash;Z</option>
+    </select>
+  </div>
+  {% endif %}
+
+  <div class="writeup-cards">
+    {% for child in children %}
+    <a href="{{ child.url | relative_url }}" class="writeup-card"
+       data-title="{{ child.title | escape }}"
+       data-default-order="{{ forloop.index }}"
+       data-difficulty-rank="{% case child.difficulty %}{% when 'Hard' %}3{% when 'Medium' %}2{% when 'Easy' %}1{% else %}0{% endcase %}"
+       data-date="{% if child.date %}{{ child.date | date: '%Y-%m-%d' }}{% endif %}">
+      <span class="writeup-card-title">{{ child.title }}</span>
+      {% if child.difficulty %}
+      <span class="difficulty-pill difficulty-{{ child.difficulty | downcase }}">{{ child.difficulty }}</span>
+      {% endif %}
+    </a>
+    {% endfor %}
+  </div>
 </div>

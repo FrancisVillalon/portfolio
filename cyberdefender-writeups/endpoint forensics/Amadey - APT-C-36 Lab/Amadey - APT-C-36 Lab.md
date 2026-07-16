@@ -4,11 +4,10 @@ parent: Endpoint Forensics
 grand_parent: Cyberdefenders
 nav_order: 1
 difficulty: Medium
+date: 2026-06-20
 ---
 
 #cyberdefender-medium #endpoint-forensics #volatility3 #finished #reviewed
-
-# Amadey - APT-C-36 Lab (CyberDefenders - Medium)
 
 # Scenario
 An after-hours alert from the Endpoint Detection and Response (EDR) system flags suspicious activity on a Windows workstation. The flagged malware aligns with the Amadey Trojan Stealer. Your job is to analyze the presented memory dump and create a detailed report for actions taken by the malware.

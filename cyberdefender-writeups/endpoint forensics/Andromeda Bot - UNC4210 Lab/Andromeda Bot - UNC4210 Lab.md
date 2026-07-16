@@ -4,6 +4,7 @@ parent: Endpoint Forensics
 grand_parent: Cyberdefenders
 nav_order: 2
 difficulty: Medium
+date: 2026-06-26
 ---
 
 #endpoint-forensics #MemProcFS #VirusTotal #EvtxECmd #TimelineExplorer #ZimmermanTools #cyberdefender-medium #finished #reviewed #CyberDefenders #CyberSecurity #BlueYard #BlueTeam #InfoSec #SOC #SOCAnalyst #DFIR #CCD #CyberDefender

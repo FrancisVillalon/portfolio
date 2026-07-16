@@ -4,6 +4,7 @@ parent: Network Forensics
 grand_parent: Cyberdefenders
 nav_order: 6
 difficulty: Easy
+date: 2026-06-15
 ---
 
 #wireshark #network-miner #cyberdefender-easy #finished #reviewed 

@@ -4,6 +4,7 @@ parent: Network Forensics
 grand_parent: Cyberdefenders
 nav_order: 3
 difficulty: Easy
+date: 2026-06-23
 ---
 
 #network-forensics #wireshark #cyberdefender-easy #finished #reviewed #CyberDefenders #CyberSecurity #BlueYard #BlueTeam #InfoSec #SOC #SOCAnalyst #DFIR #CCD #CyberDefender

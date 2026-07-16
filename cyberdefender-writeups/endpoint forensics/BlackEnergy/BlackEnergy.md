@@ -4,6 +4,7 @@ parent: Endpoint Forensics
 grand_parent: Cyberdefenders
 nav_order: 3
 difficulty: Medium
+date: 2026-05-30
 ---
 
 #volatility2 #endpoint-forensics #ldrmodules #injected-dll #cyberdefender-medium #reviewed #finished 

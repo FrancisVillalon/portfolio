@@ -4,6 +4,7 @@ parent: Endpoint Forensics
 grand_parent: Cyberdefenders
 nav_order: 7
 difficulty: Easy
+date: 2026-06-17
 ---
 
 #volatility3 #endpoint-forensics #cyberdefender-easy #finished #reviewed 

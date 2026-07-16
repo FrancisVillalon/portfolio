@@ -314,11 +314,38 @@
     font-weight: 600;
   }
 
-  .writeup-grid {
+  .writeup-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 12px;
-    margin: 32px 0;
+    margin: 16px 0 32px 0;
+  }
+
+  .writeup-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    margin-top: 32px;
+  }
+
+  .writeup-sort-label {
+    font-size: 12px;
+    color: #8b949e;
+  }
+
+  .writeup-sort-select {
+    font-size: 12px;
+    color: inherit;
+    background: #21262d;
+    border: 1px solid rgba(128, 128, 128, 0.35);
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+  }
+
+  .writeup-sort-select:hover {
+    border-color: #7253ed;
   }
 
   .writeup-card {
@@ -590,6 +617,20 @@
     flex-wrap: wrap;
     gap: 6px;
     margin: 4px 0 32px 0 !important;
+  }
+
+  .breadcrumb-nav {
+    display: flex !important;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+
+  .breadcrumb-date {
+    font-size: 0.75rem;
+    color: #8b949e;
+    white-space: nowrap;
   }
 
   .tag-pill {
@@ -888,6 +929,56 @@
         });
       }
     }
+
+    {% if page.date %}
+    var breadcrumbNav = document.querySelector(".breadcrumb-nav");
+    if (breadcrumbNav) {
+      var dateSpan = document.createElement("span");
+      dateSpan.className = "breadcrumb-date";
+      dateSpan.textContent = "Published {{ page.date | date: "%B %-d, %Y" }}";
+      breadcrumbNav.appendChild(dateSpan);
+    }
+    {% endif %}
+  });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".writeup-sort-select").forEach(function (select) {
+      var cardsContainer = select.closest(".writeup-toolbar").nextElementSibling;
+      if (!cardsContainer || !cardsContainer.classList.contains("writeup-cards")) return;
+
+      var cards = Array.prototype.slice.call(cardsContainer.querySelectorAll(".writeup-card"));
+
+      select.addEventListener("change", function () {
+        var mode = select.value;
+        var sorted = cards.slice();
+
+        if (mode === "alpha") {
+          sorted.sort(function (a, b) {
+            return a.dataset.title.localeCompare(b.dataset.title);
+          });
+        } else if (mode === "difficulty") {
+          sorted.sort(function (a, b) {
+            var byRank = Number(b.dataset.difficultyRank) - Number(a.dataset.difficultyRank);
+            return byRank !== 0 ? byRank : Number(a.dataset.defaultOrder) - Number(b.dataset.defaultOrder);
+          });
+        } else if (mode === "recent") {
+          sorted.sort(function (a, b) {
+            if (!a.dataset.date && !b.dataset.date) return 0;
+            if (!a.dataset.date) return 1;
+            if (!b.dataset.date) return -1;
+            return b.dataset.date.localeCompare(a.dataset.date);
+          });
+        } else {
+          sorted.sort(function (a, b) {
+            return Number(a.dataset.defaultOrder) - Number(b.dataset.defaultOrder);
+          });
+        }
+
+        sorted.forEach(function (card) {
+          cardsContainer.appendChild(card);
+        });
+      });
+    });
   });
 
   document.addEventListener("DOMContentLoaded", function () {

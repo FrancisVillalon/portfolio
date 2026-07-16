@@ -4,6 +4,7 @@ parent: Endpoint Forensics
 grand_parent: Cyberdefenders
 nav_order: 4
 difficulty: Medium
+date: 2026-05-30
 ---
 
 #endpoint-forensics #volatility3 #hex-dump #byte-offset #cyberdefender-medium #reviewed #finished
