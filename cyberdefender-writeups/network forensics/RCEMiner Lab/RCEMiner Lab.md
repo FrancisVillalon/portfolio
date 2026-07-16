@@ -14,6 +14,7 @@ Over the past 24 hours, the IT department has noticed a drastic increase in CPU 
 
 Analyze the provided PCAP file using the network analysis tools available to you. Your goal is to identify how the attacker gained access and what actions they took on the compromised server.
 
+# Questions
 ## Q1 — Vulnerability that was exploited
 >To identify the entry point of the attack and prevent similar breaches in the future, it's crucial to recognize the vulnerability that was exploited and the method used by the attacker to execute unauthorized commands. Which vulnerability was exploited to gain initial access to the public webserver?
 

@@ -16,7 +16,6 @@ A compromised machine has been flagged due to suspicious network traffic. Your t
 ---
 
 # Questions
-
 ## Q1 — Finding the Malicious URL
 
 > The attacker successfully executed a command to download the first stage of the malware. What is the URL from which the first malware stage was installed?

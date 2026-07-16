@@ -12,7 +12,6 @@ date: 2026-05-30
 A SOC analyst took a memory dump from a machine infected with a meterpreter malware. As a Digital Forensicator, your job is to analyze the dump, extract the available indicators of compromise (IOCs) and answer the provided questions.
 
 # Questions
-
 ##  What is the SHA1 hash of Triage-Memory.mem (memory dump)?
 
 We use `Get-FileHash` in PowerShell on Windows to get the hash of the memory dump.

@@ -13,7 +13,6 @@ date: 2026-05-30
 A multinational corporation has suffered a cyber attack, resulting in the theft of sensitive data. The attack employed a previously unseen variant of the BlackEnergy v2 malware. The company's security team has obtained a memory dump from the infected machine and is seeking your expertise as a SOC analyst to analyze the dump in order to understand the scope and impact of the attack.
 
 # Questions
-
 ## Which volatility profile would be best for this machine?
 
 This is trivially answered by just using imageinfo.

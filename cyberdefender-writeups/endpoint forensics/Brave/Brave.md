@@ -14,7 +14,6 @@ date: 2026-05-30
 Investigate Windows memory images using Volatility3, PowerShell, and a hex editor to extract system artifacts, analyze processes, network connections, and reconstruct user activity.
 
 # Questions
-
 ## Q1 — RAM Image Acquisition Time
 
 > What time was the RAM image acquired according to the suspect system?

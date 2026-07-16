@@ -15,7 +15,6 @@ An automated alert has detected unusual XML data being processed by the server, 
 Analyze the provided PCAP file using the network analysis tools available to you. Your goal is to identify how the attacker gained access and what actions they took.
 
 # Questions
-
 ## Q1  — Identifying highest-numbered open port
 > Identifying the open ports discovered by an attacker helps us understand which services are exposed and potentially vulnerable. Can you identify the highest-numbered port that is open on the victim's web server?
 
