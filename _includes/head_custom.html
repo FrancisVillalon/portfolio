@@ -186,6 +186,19 @@
     cursor: pointer;
   }
 
+  /* Long writeup titles (eg. "Andromeda Bot - UNC4210 Lab") otherwise wrap
+     to a second line inside a box sized for one, which looks cramped and
+     misaligned at deeper indent levels. Truncate with an ellipsis instead;
+     JS below sets a `title` attribute so the full name is still available
+     on hover. scroll-margin gives scrollIntoView() breathing room above
+     the item instead of pinning it flush to the nav's top edge. */
+  .nav-list .nav-list-item .nav-list-link {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    scroll-margin-block: 96px;
+  }
+
   .gh-alert {
     border-left-width: 4px !important;
     border-radius: 0 6px 6px 0;
@@ -771,16 +784,58 @@
   // bubble-phase handler toggles .active). This keeps the expand/collapse
   // transition for manual clicks while skipping it when the theme's JS
   // auto-opens the current page's section on every page load.
+  //
+  // Also enforces accordion behaviour: opening a section collapses any
+  // sibling section at the same level that was already open, so exploring
+  // a few categories doesn't leave the sidebar as one long scrolling list.
+  // Read here (in capture phase, before just-the-docs.js's own bubble-phase
+  // handler toggles .active) rather than after, so the pre-click state
+  // reliably tells us whether this click is about to open or close the
+  // item - listener registration order wouldn't guarantee that if both
+  // handlers ran in the bubble phase.
   document.addEventListener(
     "click",
     function (e) {
       var btn = e.target.closest && e.target.closest(".nav-list-expander");
-      if (btn && btn.parentNode) {
-        btn.parentNode.classList.add("nav-animate");
-      }
+      if (!btn || !btn.parentNode) return;
+
+      var item = btn.parentNode;
+      item.classList.add("nav-animate");
+
+      var isOpening = !item.classList.contains("active");
+      if (!isOpening) return;
+
+      var siblingList = item.parentNode;
+      if (!siblingList) return;
+
+      Array.prototype.forEach.call(siblingList.children, function (sibling) {
+        if (sibling === item || !sibling.classList.contains("active")) return;
+        sibling.classList.add("nav-animate");
+        sibling.classList.remove("active");
+        var siblingExpander = sibling.querySelector(":scope > .nav-list-expander");
+        if (siblingExpander) siblingExpander.ariaExpanded = "false";
+      });
     },
     true
   );
+
+  // Full title on hover for nav labels truncated by the ellipsis CSS above.
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".nav-list-link").forEach(function (link) {
+      var text = link.textContent.trim();
+      if (text) link.title = text;
+    });
+  });
+
+  // The theme auto-expands the active page's ancestor chain on load but
+  // never scrolls it into view, so landing on a deeply nested page can put
+  // the highlighted item outside the sidebar's visible (independently
+  // scrolling) area with no indication it's there. Center it once layout
+  // has settled.
+  document.addEventListener("DOMContentLoaded", function () {
+    var active = document.querySelector(".site-nav .nav-list-link.active");
+    if (active) active.scrollIntoView({ block: "center" });
+  });
 
   document.addEventListener("DOMContentLoaded", function () {
     var siteTitle = document.querySelector(".site-title");
