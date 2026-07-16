@@ -13,6 +13,24 @@
     padding: 40px 16px 28px 16px !important;
     border-bottom: 1px solid rgba(128, 128, 128, 0.25) !important;
     text-align: center;
+    /* Anchor point for #menu-button below - without this, the theme's own
+       mobile menu toggle gets swept into the flex-column flow above and
+       renders centered under the profile links instead of pinned to a
+       corner. */
+    position: relative;
+  }
+
+  /* The theme lays #menu-button out inline in a horizontal header row -
+     forcing .site-header into a column above (for the centered profile
+     block) drags the button along into that flow. Take it out of flow and
+     pin it to the header's corner instead, matching the usual mobile
+     hamburger placement. */
+  .site-header .site-button {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    height: auto;
+    padding: 8px;
   }
 
   .site-title {
@@ -529,11 +547,15 @@
       border: 1px solid rgba(128, 128, 128, 0.35);
       background: #21262d;
       color: #fff;
-      font-size: 20px;
       cursor: pointer;
       z-index: 21;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
     }
+  }
+
+  .page-toc-toggle svg {
+    width: 22px;
+    height: 22px;
   }
 
   .page-toc-backdrop {
@@ -589,17 +611,51 @@
     margin-top: 28px !important;
   }
 
-  .main-content p {
-    line-height: 1.7;
+  /* Theme's base body copy sits at 14px on mobile / 16px on desktop with
+     1.6 line-height - readable but tight for long-form writeups. Bump both
+     a notch, scoped to the reading content only (sidebar/nav keep their own
+     deliberately smaller sizing). */
+  .main-content {
+    font-size: 1.05rem;
   }
 
-  /* Inline code (e.g. `192.168.20.100`) defaults to 0.75em in the theme,
-     which reads noticeably smaller than surrounding text. Bump it up,
-     scoped the same way the theme scopes its own background/border style
-     for inline code, so fenced code blocks are unaffected. */
-  .main-content :not(pre, figure) > code {
+  .main-content p {
+    line-height: 1.75;
+  }
+
+  /* Code (inline `like this` and fenced ```blocks```) defaults to 0.75em
+     in the theme, which reads noticeably smaller than surrounding text.
+     Bump both up, and give fenced blocks a bit more line-height since
+     monospace text at a tight line-height is harder to scan. */
+  .main-content code {
     font-size: 0.95em;
   }
+
+  .main-content pre code {
+    line-height: 1.6;
+  }
+
+  /* The theme's fenced-code syntax colors are the GitHub *light* rouge
+     palette (near-black text, muted low-contrast tones) applied unconditionally,
+     regardless of `color_scheme: dark` in _config.yml - against this site's
+     dark background most tokens are nearly illegible. Override with a
+     dark-appropriate palette (GitHub Dark's) instead. These rules match the
+     theme's own `.highlight .xx` selectors and win on source order since
+     this stylesheet loads after the theme's. */
+  .highlight .c, .highlight .ch, .highlight .cm, .highlight .cp, .highlight .cpf, .highlight .c1, .highlight .cs, .highlight .gp, .highlight .go { color: #8b949e; }
+  .highlight .err, .highlight .gr, .highlight .gt { color: #ff7b72; }
+  .highlight .k, .highlight .kc, .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr, .highlight .kt, .highlight .o, .highlight .ow { color: #ff7b72; }
+  .highlight .l, .highlight .ld, .highlight .m, .highlight .mb, .highlight .mf, .highlight .mh, .highlight .mi, .highlight .mo, .highlight .il, .highlight .na, .highlight .no, .highlight .nl, .highlight .py { color: #79c0ff; }
+  .highlight .s, .highlight .sa, .highlight .sb, .highlight .sc, .highlight .dl, .highlight .sd, .highlight .s2, .highlight .se, .highlight .sh, .highlight .si, .highlight .sr, .highlight .ss, .highlight .sx, .highlight .s1 { color: #a5d6ff; }
+  .highlight .n, .highlight .p, .highlight .pm, .highlight .nn, .highlight .nx, .highlight .w { color: #c9d1d9; }
+  .highlight .nb, .highlight .bp, .highlight .nv, .highlight .vc, .highlight .vg, .highlight .vi, .highlight .vm { color: #ffa657; }
+  .highlight .nc, .highlight .nd, .highlight .ne, .highlight .nf, .highlight .fm { color: #d2a8ff; }
+  .highlight .ni, .highlight .nt { color: #7ee787; }
+  .highlight .gd { color: #ffdcd7; }
+  .highlight .gi { color: #aff5b4; }
+  .highlight .gh, .highlight .gu { color: #79c0ff; }
+  .highlight .ge { font-style: italic; }
+  .highlight .gs { font-weight: bold; }
 
   .main-content blockquote {
     border-left: 3px solid #7253ed;
@@ -695,8 +751,16 @@
 
   /* Hide the theme's default "This site uses Just the Docs..." credit line.
      MIT license only requires the notice travel with the source, not a
-     visible on-page badge - this div has no other content in it. */
+     visible on-page badge - this div has no other content in it. The theme
+     actually renders this credit twice: once in the sidebar (.site-footer,
+     desktop only) and once more in a bare <footer> at the end of
+     .main-content (mobile only, via the d-md-none utility class) - both
+     need hiding. */
   .site-footer {
+    display: none !important;
+  }
+
+  .main-content > footer {
     display: none !important;
   }
 </style>
@@ -838,7 +902,8 @@
     var toggle = document.createElement("button");
     toggle.className = "page-toc-toggle";
     toggle.setAttribute("aria-label", "Toggle table of contents");
-    toggle.innerHTML = "&#9776;";
+    toggle.innerHTML =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
     document.body.appendChild(toggle);
 
     function openToc() {
