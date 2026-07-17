@@ -8,7 +8,7 @@ This is my unified site for cybersecurity writeups and home lab documentation, b
 
 I combined three collections into one site:
 
-- **[Cyberdefenders](cyberdefender-writeups/)**: blue team CTF writeups covering malware analysis, endpoint forensics, network forensics, reverse engineering, and threat hunting. All challenges are from [CyberDefenders](https://cyberdefenders.org/).
+- **[Cyberdefenders](cyberdefender-writeups/)**: blue team CTF writeups covering malware analysis, endpoint forensics, network forensics, and threat hunting. All challenges are from [CyberDefenders](https://cyberdefenders.org/).
 - **[MemLabs](memlabs-writeups/)**: memory forensics writeups for stuxnet999's [MemLabs](https://github.com/stuxnet999/MemLabs) CTF series, using Volatility 2.
 - **[Cybersecurity Home Lab](cybersecurity-home-lab/)**: a virtualized enterprise network I built (WAN/DMZ/LAN segmentation, Wazuh, Suricata) with a deliberately vulnerable agentic AI app as an attack target, plus my attack and detection write-ups.
 
