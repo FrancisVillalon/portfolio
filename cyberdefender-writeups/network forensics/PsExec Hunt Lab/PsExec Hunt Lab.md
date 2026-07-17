@@ -203,7 +203,6 @@ Which tells us `10.0.0.131` has host name `MARKETING-PC`.
 
 **Answer:** `MARKETING-PC`
 
----
 # Completion
 
 ![](images/fe66fe62c09d1ec95a730fc83d1bb50b8b2099aee84f261c0333fb50aeb995e0.webp)

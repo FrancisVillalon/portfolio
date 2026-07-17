@@ -465,7 +465,6 @@ The shell codes know where it is in memory by using the `GetPC` technique which 
 
 **Answer:** `kernel32.dll`
 
----
 # Completion
 
 ![](images/image-833.webp)

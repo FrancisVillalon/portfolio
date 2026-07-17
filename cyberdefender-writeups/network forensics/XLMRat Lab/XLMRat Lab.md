@@ -13,8 +13,6 @@ date: 2026-06-12
 
 A compromised machine has been flagged due to suspicious network traffic. Your task is to analyze the PCAP file to determine the attack method, identify any malicious payloads, and trace the timeline of events. Focus on how the attacker gained access, what tools or techniques were used, and how the malware operated post-compromise.
 
----
-
 # Questions
 ## Q1 — Finding the Malicious URL
 
@@ -175,8 +173,6 @@ We can also grep for `WriteAllText`, which will give us the same result.
 *Grep output showing all WriteAllText calls in the script*
 
 **Answer:** `Conted.ps1, Conted.bat, Conted.vbs`
-
----
 
 # Completion
 

@@ -169,7 +169,6 @@ Therefore our answer is `6fbc4d506f4d4e0a64ca09fd826408d3103c1a258c370553583a07a
 
 **Answer:** `6fbc4d506f4d4e0a64ca09fd826408d3103c1a258c370553583a07a4cb9a6530`
 
----
 # Completion
 ![](images/image-853.webp)
 

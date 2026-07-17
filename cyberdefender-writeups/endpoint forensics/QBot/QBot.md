@@ -188,7 +188,6 @@ This is trivially answered using the `VirusTotal` report by navigating to `Detai
 
 **Answer:** `2015-06-05 18:17`
 
----
 # Completion
 
 ![](images/image-851.webp)

@@ -218,7 +218,6 @@ The PID is 3496, which corresponds to the infected process we found earlier.
 
 **Answer:** `3496`
 
----
 # Completion
 
 ![](images/image-196.webp)

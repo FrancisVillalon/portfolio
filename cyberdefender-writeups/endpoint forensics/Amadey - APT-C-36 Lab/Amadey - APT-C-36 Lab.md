@@ -147,8 +147,6 @@ Which means that there is a scheduled task for the executable likely being used 
 
 **Answer:** `C:\Windows\System32\Tasks\lssass.exe`
 
----
-
 # Completion
 
 ![](images/image-672.webp)

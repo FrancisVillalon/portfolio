@@ -171,7 +171,6 @@ For this we use `windows.registry.userassist`, which tells us the total time the
 
 **Answer:** `4`
 
----
 # Completion
 
 ![](images/3cd49358545a79afe0639c2e12dd6e05d3753936071b0969a7caa5387d19bbc7.webp)

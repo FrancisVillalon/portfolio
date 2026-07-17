@@ -157,7 +157,6 @@ From the body we can tell that the user is trying to access `/etc/passwd`
 
 **Answer:** `../../../../../etc/passwd`
 
----
 # Completion
 
 ![](images/image-584.webp)

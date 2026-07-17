@@ -123,7 +123,6 @@ This tells us the address is `0x980000`.
 
 **Answer:** `0x980000`
 
----
 # Notes
 ## Summary of The 3 PEB Loader Linked Lists
 

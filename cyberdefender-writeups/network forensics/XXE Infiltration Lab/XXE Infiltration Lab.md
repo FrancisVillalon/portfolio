@@ -154,8 +154,6 @@ The `internals` entity reads a resource defined by the `&payload` then base64 en
 
 **Answer:** `booking.php`
 
----
-
 # Completion
 
 ![](images/3ffc166941afcf1d71df3890fe1e56824301fbcf86286caffacf5be7cc5ca624.webp)

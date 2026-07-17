@@ -360,8 +360,6 @@ Therefore, our answer is `XMRig/5.5.0`.
 
 **Answer:** `XMRig/5.5.0`
 
----
-
 # Completion
 
 ![](images/image-663.webp)

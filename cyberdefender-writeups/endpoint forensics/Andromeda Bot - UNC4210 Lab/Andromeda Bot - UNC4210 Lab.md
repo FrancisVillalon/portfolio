@@ -258,7 +258,6 @@ Which gives us something like this
 Once it reaches 100, we just `Ctrl+C` the program and view the results.
 With this we can now answer the questions in the lab.
 
----
 # Questions
 ## Q1 — Serial Number of USB Device
 > Tracking the serial number of the USB device is essential for identifying potentially unauthorized devices used in the incident, helping to trace their origin and narrow down your investigation. What is the serial number of the inserted USB device?
@@ -440,7 +439,6 @@ We will also find this threat intelligence blog on Google Cloud — [Turla: A Ga
 
 **Answer:** `Turla`
 
----
 # Completion
 
 ![](images/c2b7fc8933fc7bacfb8364a5e858b7b00f58146f39f0b9410797bcf4d37871a5.webp)
