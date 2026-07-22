@@ -23,7 +23,7 @@ Blue team CTF writeups covering malware analysis, endpoint forensics, network fo
   <a href="{{ '/cyberdefender-writeups/network%20forensics/' | relative_url }}" class="category-card">
     <div class="category-card-title">Network Forensics</div>
     <p>Packet capture and traffic analysis, tracing C2 and lateral movement.</p>
-    <span class="category-count">9 writeups</span>
+    <span class="category-count">10 writeups</span>
   </a>
   <a href="{{ '/cyberdefender-writeups/threat%20hunting/' | relative_url }}" class="category-card">
     <div class="category-card-title">Threat Hunting</div>
